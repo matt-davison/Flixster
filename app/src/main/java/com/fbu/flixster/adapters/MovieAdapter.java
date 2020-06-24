@@ -1,6 +1,7 @@
 package com.fbu.flixster.adapters;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.fbu.flixster.R;
 import com.fbu.flixster.models.Movie;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
@@ -58,7 +61,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         public void bind(Movie movie) {
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
-            Glide.with(context).load(movie.getPosterPath()).into(ivPoster);
+            String imageUrl;
+            if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                imageUrl = movie.getBackdropPath();
+            } else {
+                imageUrl = movie.getPosterPath();
+            }
+            Glide.with(context).load(imageUrl).placeholder(R.drawable.flicks_movie_placeholder)./*transform(new RoundedCornersTransformation(30, 15)).*/into(ivPoster);
         }
     }
 }
