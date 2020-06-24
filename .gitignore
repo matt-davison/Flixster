@@ -12,4 +12,4 @@
 /captures
 .externalNativeBuild
 .cxx
-app/apikey.properties
+apikey.properties
