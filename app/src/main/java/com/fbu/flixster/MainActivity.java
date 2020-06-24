@@ -21,8 +21,17 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
 
-    // Better way to store API Key???
-    public static final String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key="/*INSERT_KEY*/;
+
+    // Better way to store API Key??? Read in from a file -> extra feature is to guide users through making their own key
+    //android provides an object called handler -> handler.post takes object and executes it on a thread
+    // android also has async tasks
+    //main thread is UI thread and is called every frame to update the app
+    //do not do any networking in main UI thread
+    //create runnable object with a method called run() -> will be called asynchronously
+    //make commits more clear
+
+
+    public static final String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + BuildConfig.API_KEY;
 
     List<Movie> movies;
 
