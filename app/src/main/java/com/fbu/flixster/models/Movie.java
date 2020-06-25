@@ -23,13 +23,13 @@ import okhttp3.Headers;
 public class Movie {
 
     static final String TAG = "Movie";
-    private static final String VIDEO_ID_URL = "https://api.themoviedb.org/3/movie/%s?api_key=" + BuildConfig.API_KEY;
+    private static final String VIDEO_ID_URL = "https://api.themoviedb.org/3/movie/%s/videos?api_key=" + BuildConfig.API_KEY;
 
     String posterPath;
     String title;
     String overview;
     String backdropPath;
-    String videoPath;
+    String videoId;
 
     double voteAverage;
 
@@ -49,6 +49,8 @@ public class Movie {
             voteAverage = jsonObject.getDouble("vote_average");
             String movieID = jsonObject.getString("id");
 
+            //TODO: Move getting the videoId to MovieDetailsActivity.java
+
             // now acquire the videoID
             AsyncHttpClient client = new AsyncHttpClient();
             client.get(String.format(VIDEO_ID_URL, movieID), new JsonHttpResponseHandler() {
@@ -57,10 +59,10 @@ public class Movie {
                     Log.d(TAG, "onSuccess");
                     JSONObject videoJsonObject = json.jsonObject;
                     try {
-                        videoPath = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
+                        videoId = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
                     } catch (JSONException e) {
                         Log.e(TAG, "results not found in json", e);
-                        videoPath = "";
+                        videoId = "";
                     }
                 }
                 @Override
@@ -131,5 +133,5 @@ public class Movie {
     /**
      * Get the video ID.
      */
-    public String getVideoPath() { return String.format("https://youtube.com/watch?v=%s", videoPath); }
+    public String getVideoId() { return videoId; }
 }
