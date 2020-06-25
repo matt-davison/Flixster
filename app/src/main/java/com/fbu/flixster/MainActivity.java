@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -15,6 +17,7 @@ import com.fbu.flixster.models.Movie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +28,14 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
 
-
-    // Better way to store API Key??? Read in from a file -> extra feature is to guide users through making their own key
-    //android provides an object called handler -> handler.post takes object and executes it on a thread
-    // android also has async tasks
-    //main thread is UI thread and is called every frame to update the app
-    //do not do any networking in main UI thread
-    //create runnable object with a method called run() -> will be called asynchronously
-    //make commits more clear
-
-
     public static final String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + BuildConfig.API_KEY;
 
     List<Movie> movies;
 
+    /**
+     * Fetches movie information from TMDB and displays the currently playing movies.
+     * @param savedInstanceState The activity's previously saved state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +43,18 @@ public class MainActivity extends AppCompatActivity {
 
         movies = new ArrayList<Movie>();
         RecyclerView rvMovies = findViewById(R.id.rvMovies);
-        // Create the adapter
-        final MovieAdapter movieAdapter = new MovieAdapter(this, movies);
+
+
+        // Create the RecyclerView's Adapter and Listener
+        final MovieAdapter movieAdapter = new MovieAdapter(this, movies, new MovieAdapter.OnClickListener() {
+            @Override
+            public void onItemClicked(int position) {
+                Intent i = new Intent(MainActivity.this, MovieDetailsActivity.class);
+                // Using Parceler
+                i.putExtra("movie", Parcels.wrap(movies.get(position)));
+                startActivity(i);
+            }
+        });
 
         // Set the adapter on the recycler view
         rvMovies.setAdapter(movieAdapter);
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // Set a layout manager on the recycler view
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
 
+        // Collect the currently playing movies asynchronously
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(NOW_PLAYING_URL, new JsonHttpResponseHandler() {
             @Override

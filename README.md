@@ -13,7 +13,7 @@ The following **required** functionality is completed:
 * [x] For each movie displayed, user can see the following details:
   * [x] Title, Poster Image, Overview (Portrait mode)
   * [x] Title, Backdrop Image, Overview (Landscape mode)
-* [ ] Allow user to view details of the movie including ratings and popularity within a separate activity
+* [x] Allow user to view details of the movie including ratings and popularity within a separate activity
 
 The following **stretch** features are implemented:
 
@@ -25,6 +25,8 @@ The following **stretch** features are implemented:
 The following **additional** features are implemented:
 
 * [ ] List anything else that you can get done to improve the app functionality!
+
+TODO: Back button from details? Make users get their own API Key? Favorite Movies System?
 
 ## Video Walkthrough
 
