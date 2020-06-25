@@ -24,7 +24,10 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivPoster"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorText"
         android:textSize="24sp"
+        android:textStyle="bold"
         tools:text="Title Of Movie" />
 
     <TextView
@@ -38,6 +41,7 @@
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/ivPoster"
+        android:textColor="@color/colorText"
         android:textSize="14sp"
         tools:text="This is where a movie's overview goes. These are usually pretty long but it looks like the text can go as far as it needs to and the relation to the bottom of the picture will stop it" />
 </RelativeLayout>

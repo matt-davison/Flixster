@@ -2,6 +2,10 @@ package com.fbu.flixster.models;
 
 import android.util.Log;
 
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.fbu.flixster.BuildConfig;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,23 +14,27 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Headers;
+
 /**
  * Represents a Movie.
  */
 @Parcel
 public class Movie {
 
-    public static final String TAG = "Movie";
+    static final String TAG = "Movie";
+    private static final String VIDEO_ID_URL = "https://api.themoviedb.org/3/movie/%s?api_key=" + BuildConfig.API_KEY;
 
-    public String posterPath;
-    public String title;
-    public String overview;
-    public String backdropPath;
+    String posterPath;
+    String title;
+    String overview;
+    String backdropPath;
+    String videoPath;
 
-    public double voteAverage;
+    double voteAverage;
 
     // for Parceler
-    public Movie() {}
+    Movie() {}
 
     /**
      * Creates a Movie from the jsonObject
@@ -39,16 +47,38 @@ public class Movie {
             title = jsonObject.getString("title");
             overview = jsonObject.getString("overview");
             voteAverage = jsonObject.getDouble("vote_average");
+            String movieID = jsonObject.getString("id");
+
+            // now acquire the videoID
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(String.format(VIDEO_ID_URL, movieID), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess");
+                    JSONObject videoJsonObject = json.jsonObject;
+                    try {
+                        videoPath = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
+                    } catch (JSONException e) {
+                        Log.e(TAG, "results not found in json", e);
+                        videoPath = "";
+                    }
+                }
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, "onFailure");
+                }
+            });
         } catch (JSONException e) {
             Log.e(TAG, "results not found in json", e);
         }
+
     }
 
     /**
      * Creates a list of movies
      * @param movieJsonArray The JSONArray containing movie elements
      * @return A list of all the movie elements
-     * @throws JSONException
+     * @throws JSONException An element(s) are missing.
      */
     public static List<Movie> fromJsonArray(JSONArray movieJsonArray) throws JSONException {
         List<Movie> movies = new ArrayList<>();
@@ -97,4 +127,9 @@ public class Movie {
     public Double getVoteAverage() {
         return voteAverage;
     }
+
+    /**
+     * Get the video ID.
+     */
+    public String getVideoPath() { return String.format("https://youtube.com/watch?v=%s", videoPath); }
 }
