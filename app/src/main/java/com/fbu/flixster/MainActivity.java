@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -32,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
 
     List<Movie> movies;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
     /**
      * Fetches movie information from TMDB and displays the currently playing movies.
      * @param savedInstanceState The activity's previously saved state.
@@ -85,5 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onFailure");
             }
         });
+    }
+
+    public void onShowFavorites(MenuItem mi) {
+        Intent i = new Intent(MainActivity.this, FavoritesActivity.class);
+        startActivity(i);
     }
 }

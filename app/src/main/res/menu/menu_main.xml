@@ -1,0 +1,13 @@
+<!-- Menu file for `activity_movies.xml` is located in a file
+     such as `res/menu/menu_movies.xml`  -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/miFavorites"
+        android:icon="@android:drawable/btn_star_big_on"
+        android:title="Favorites"
+        android:onClick="onShowFavorites"
+        app:showAsAction="always">
+
+    </item>
+</menu>

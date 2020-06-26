@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,14 @@ public class Movie {
 
     }
 
+    public Movie(String posterPath, String title, String overview, String backdropPath, String movieId, double voteAverage) {
+        this.posterPath = posterPath;
+        this.title = title;
+        this.overview = overview;
+        this.backdropPath = backdropPath;
+        this.movieId = movieId;
+        this.voteAverage = voteAverage;
+    }
     /**
      * Creates a list of movies
      * @param movieJsonArray The JSONArray containing movie elements

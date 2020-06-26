@@ -74,5 +74,15 @@
         android:visibility="invisible"
         app:srcCompat="@android:drawable/ic_media_play" />
 
+    <Button
+        android:id="@+id/btnAddToFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        android:text="Add to Favorites" />
+
 
 </RelativeLayout>

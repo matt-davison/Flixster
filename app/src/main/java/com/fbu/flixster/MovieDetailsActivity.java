@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -48,8 +51,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
         Log.d(TAG, String.format("Showing details for '%s'", movie.getTitle()));
 
-        movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
-
         binding.tvTitle.setText(movie.getTitle());
         binding.tvOverview.setText(movie.getOverview());
         float voteAverage = movie.getVoteAverage().floatValue();
@@ -82,6 +83,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "onFailure");
+            }
+        });
+
+        binding.btnAddToFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MovieDetailsActivity.this, FavoritesActivity.class);
+                // Using Parceler
+                i.putExtra("movie", Parcels.wrap(movie));
+                // TODO: REMOVE ONCE PARCELING WORKS
+                i.putExtra("posterPath", movie.getPosterPath());
+                i.putExtra("title", movie.getTitle());
+                i.putExtra("overview", movie.getOverview());
+                i.putExtra("backdropPath", movie.getBackdropPath());
+                i.putExtra("movieId", movie.getMovieId());
+                i.putExtra("voteAverage", movie.getVoteAverage());
+                startActivity(i);
             }
         });
     }
