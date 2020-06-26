@@ -26,6 +26,8 @@ import org.parceler.Parcels;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import okhttp3.Headers;
 
+//TODO: Add landscape view!
+//TODO: Use dynamically sized images!
 /**
  * This Activity shows a Movie's details
  */
@@ -67,6 +69,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 JSONObject videoJsonObject = json.jsonObject;
                 try {
                     final String videoId = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
+                    Log.d(TAG, String.format("Got key for %s", movie.getTitle()));
                     binding.ivBackdrop.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -75,8 +78,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             startActivity(i);
                         }
                     });
-                    //TODO: Add play button to show that the backdrop can now be clicked on to play a trailer
-
+                    binding.ivPlay.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     Log.e(TAG, "results not found in json", e);
                 }
