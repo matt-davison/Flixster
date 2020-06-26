@@ -29,8 +29,7 @@ public class Movie {
     String title;
     String overview;
     String backdropPath;
-    String videoId;
-
+    String movieId;
     double voteAverage;
 
     // for Parceler
@@ -47,29 +46,7 @@ public class Movie {
             title = jsonObject.getString("title");
             overview = jsonObject.getString("overview");
             voteAverage = jsonObject.getDouble("vote_average");
-            String movieID = jsonObject.getString("id");
-
-            //TODO: Move getting the videoId to MovieDetailsActivity.java
-
-            // now acquire the videoID
-            AsyncHttpClient client = new AsyncHttpClient();
-            client.get(String.format(VIDEO_ID_URL, movieID), new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Headers headers, JSON json) {
-                    Log.d(TAG, "onSuccess");
-                    JSONObject videoJsonObject = json.jsonObject;
-                    try {
-                        videoId = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
-                    } catch (JSONException e) {
-                        Log.e(TAG, "results not found in json", e);
-                        videoId = "";
-                    }
-                }
-                @Override
-                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Log.d(TAG, "onFailure");
-                }
-            });
+            movieId = jsonObject.getString("id");
         } catch (JSONException e) {
             Log.e(TAG, "results not found in json", e);
         }
@@ -133,5 +110,5 @@ public class Movie {
     /**
      * Get the video ID.
      */
-    public String getVideoId() { return videoId; }
+    public String getMovieId() { return movieId; }
 }

@@ -5,9 +5,13 @@ def apikeyProperties = new Properties()
 apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
+
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
 
+    buildFeatures {
+        viewBinding true
+    }
     defaultConfig {
         applicationId "com.fbu.flixster"
         minSdkVersion 21
