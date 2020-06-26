@@ -26,8 +26,6 @@ import org.parceler.Parcels;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import okhttp3.Headers;
 
-//TODO: Add landscape view!
-//TODO: Use dynamically sized images!
 /**
  * This Activity shows a Movie's details
  */
@@ -52,14 +50,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
 
-
         binding.tvTitle.setText(movie.getTitle());
         binding.tvOverview.setText(movie.getOverview());
         float voteAverage = movie.getVoteAverage().floatValue();
         binding.rbVoteAverage.setRating(voteAverage = voteAverage > 0 ? voteAverage / 2.0f : 0);
-        Glide.with(getApplicationContext()).load(movie.getBackdropPath()).placeholder(R.drawable.flicks_movie_placeholder).transform(new RoundedCornersTransformation(30, 0)).into(binding.ivBackdrop);
+        Glide.with(this).load(movie.getBackdropPath()).placeholder(R.drawable.flicks_movie_placeholder).transform(new RoundedCornersTransformation(30, 0)).into(binding.ivBackdrop);
 
-        // TODO: This may cause a bug that makes the first backdrop clicked on open a MovieTrailerActivity but the trailer doesn't play
         // now acquire the videoID
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(String.format(VIDEO_ID_URL, movie.getMovieId()), new JsonHttpResponseHandler() {

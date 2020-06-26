@@ -26,7 +26,7 @@ The following **additional** features are implemented:
 
 * [ ] List anything else that you can get done to improve the app functionality!
 
-TODO: Back button from details? Make users get their own API Key? Favorite Movies System?
+TODO: Favorite Movies System?
 
 ## Video Walkthrough
 
