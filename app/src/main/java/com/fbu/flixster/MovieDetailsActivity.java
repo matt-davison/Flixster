@@ -67,7 +67,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 JSONObject videoJsonObject = json.jsonObject;
                 try {
                     final String videoId = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
-
                     binding.ivBackdrop.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
