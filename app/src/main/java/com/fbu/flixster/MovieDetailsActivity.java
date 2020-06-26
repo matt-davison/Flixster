@@ -75,6 +75,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 JSONObject videoJsonObject = json.jsonObject;
                 try {
                     videoId = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
+
+                    ivBackdrop.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(MovieDetailsActivity.this, MovieTrailerActivity.class);
+                            i.putExtra("videoId", videoId);
+                            startActivity(i);
+                        }
+                    });
+
+                    //TODO: Add play button to show that the backdrop can now be clicked on to play a trailer
+
                 } catch (JSONException e) {
                     Log.e(TAG, "results not found in json", e);
                     videoId = "";
@@ -83,15 +95,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "onFailure");
-            }
-        });
-
-        ivBackdrop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MovieDetailsActivity.this, MovieTrailerActivity.class);
-                i.putExtra("videoId", videoId);
-                startActivity(i);
             }
         });
     }
