@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.fbu.flixster.adapters.MovieAdapter;
+import com.fbu.flixster.databinding.ActivityMovieDetailsBinding;
 import com.fbu.flixster.models.Movie;
 
 import org.json.JSONException;
@@ -34,13 +35,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final String VIDEO_ID_URL = "https://api.themoviedb.org/3/movie/%s/videos?api_key=" + BuildConfig.API_KEY;
     Movie movie;
 
-    TextView tvTitle;
-    TextView tvOverview;
-    RatingBar rbVoteAverage;
-    ImageView ivBackdrop;
-
-    String videoId;
-
     /**
      * Shows the Movie Details View.
      * @param savedInstanceState The Activity's previously saved state.
@@ -48,24 +42,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
+        final ActivityMovieDetailsBinding binding = ActivityMovieDetailsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
         Log.d(TAG, String.format("Showing details for '%s'", movie.getTitle()));
 
-        tvTitle = findViewById(R.id.tvTitle);
-        tvOverview = findViewById(R.id.tvOverview);
-        rbVoteAverage = findViewById(R.id.rbVoteAverage);
-        ivBackdrop = findViewById(R.id.ivBackdrop);
-
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
 
 
-        tvTitle.setText(movie.getTitle());
-        tvOverview.setText(movie.getOverview());
+        binding.tvTitle.setText(movie.getTitle());
+        binding.tvOverview.setText(movie.getOverview());
         float voteAverage = movie.getVoteAverage().floatValue();
-        rbVoteAverage.setRating(voteAverage = voteAverage > 0 ? voteAverage / 2.0f : 0);
-        Glide.with(getApplicationContext()).load(movie.getBackdropPath()).placeholder(R.drawable.flicks_movie_placeholder).transform(new RoundedCornersTransformation(30, 0)).into(ivBackdrop);
+        binding.rbVoteAverage.setRating(voteAverage = voteAverage > 0 ? voteAverage / 2.0f : 0);
+        Glide.with(getApplicationContext()).load(movie.getBackdropPath()).placeholder(R.drawable.flicks_movie_placeholder).transform(new RoundedCornersTransformation(30, 0)).into(binding.ivBackdrop);
 
+        // TODO: This may cause a bug that makes the first backdrop clicked on open a MovieTrailerActivity but the trailer doesn't play
         // now acquire the videoID
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(String.format(VIDEO_ID_URL, movie.getMovieId()), new JsonHttpResponseHandler() {
@@ -74,24 +66,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Log.d(TAG, "onSuccess");
                 JSONObject videoJsonObject = json.jsonObject;
                 try {
-                    videoId = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
+                    final String videoId = videoJsonObject.getJSONArray("results").getJSONObject(0).getString("key");
+
+                    binding.ivBackdrop.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(MovieDetailsActivity.this, MovieTrailerActivity.class);
+                            i.putExtra("videoId", videoId);
+                            startActivity(i);
+                        }
+                    });
+                    //TODO: Add play button to show that the backdrop can now be clicked on to play a trailer
+
                 } catch (JSONException e) {
                     Log.e(TAG, "results not found in json", e);
-                    videoId = "";
                 }
             }
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "onFailure");
-            }
-        });
-
-        ivBackdrop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MovieDetailsActivity.this, MovieTrailerActivity.class);
-                i.putExtra("videoId", videoId);
-                startActivity(i);
             }
         });
     }

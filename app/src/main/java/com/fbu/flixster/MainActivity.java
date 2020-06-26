@@ -40,10 +40,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        movies = new ArrayList<Movie>();
         RecyclerView rvMovies = findViewById(R.id.rvMovies);
 
+        movies = new ArrayList<Movie>();
 
         // Create the RecyclerView's Adapter and Listener
         final MovieAdapter movieAdapter = new MovieAdapter(this, movies, new MovieAdapter.OnClickListener() {

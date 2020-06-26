@@ -51,8 +51,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     /**
      * Inflates an item_movie Layout and populates it with a Movie.
      * @param parent The parent View.
-     * @param viewType ?
-     * @return
+     * @param viewType The type of view.
+     * @return A new ViewHolder for a Movie.
      */
     @NonNull
     @Override
@@ -82,6 +82,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // TODO: Look at potentially using ViewBinding!!! ItemMovieBinding
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOverview = itemView.findViewById(R.id.tvOverview);
             ivPoster = itemView.findViewById(R.id.ivPoster);
